@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatMash.Domain.Tests", "Cat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatMash.Persistence", "CatMash.Persistence\CatMash.Persistence.csproj", "{67EFC9F2-1B27-48E8-8581-906CC05D0D18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatMash.Api.Tests", "CatMash.Api.Tests\CatMash.Api.Tests.csproj", "{540B2065-6E2F-480D-B0BE-B4425EB6B951}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{67EFC9F2-1B27-48E8-8581-906CC05D0D18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67EFC9F2-1B27-48E8-8581-906CC05D0D18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67EFC9F2-1B27-48E8-8581-906CC05D0D18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{540B2065-6E2F-480D-B0BE-B4425EB6B951}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{540B2065-6E2F-480D-B0BE-B4425EB6B951}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{540B2065-6E2F-480D-B0BE-B4425EB6B951}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{540B2065-6E2F-480D-B0BE-B4425EB6B951}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

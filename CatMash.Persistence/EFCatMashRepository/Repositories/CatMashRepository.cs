@@ -12,6 +12,7 @@ public class CatMashRepository: ICatMashRepository
     public CatMashRepository(CatContext context)
     {
         _context = context;
+        
     }
     
     public async Task<List<Cat>> GetAllCatsAsync()

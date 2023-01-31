@@ -6,7 +6,7 @@ namespace CatMash.Domain.Services;
 public class CatMashService: ICatMashService
 {
     private readonly ICatMashRepository _repository;
-    private List<Cat> _allCats = new List<Cat>();
+    private List<Cat> _allCats = new();
 
     public CatMashService(ICatMashRepository repository)
     {   

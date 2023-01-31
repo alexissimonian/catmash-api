@@ -21,8 +21,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddDbContext<CatContext>(opt =>
     opt.UseInMemoryDatabase("CatScoreList"));
-builder.Services.AddScoped<ICatMashService, CatMashService>();
-builder.Services.AddScoped<ICatMashRepository, CatMashRepository>();
+builder.Services.AddSingleton<ICatMashService, CatMashService>();
+builder.Services.AddSingleton<ICatMashRepository, CatMashRepository>();
 
 var app = builder.Build();
 

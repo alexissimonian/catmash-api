@@ -6,7 +6,6 @@ namespace CatMash.Domain.Services;
 public class CatMashService: ICatMashService
 {
     private readonly ICatMashRepository _repository;
-    private List<Cat> _allCats = new();
 
     public CatMashService(ICatMashRepository repository)
     {   
@@ -15,12 +14,8 @@ public class CatMashService: ICatMashService
 
     public async Task<IEnumerable<Cat>> GetTwoRandomCatsAsync()
     {
-        if (!_allCats.Any())
-        {
-            _allCats = await _repository.GetAllCatsAsync();   
-        }
-
-        return GetTwoDifferentRandomCats();
+        var allCats = await _repository.GetAllCatsAsync();
+        return GetTwoDifferentRandomCats(allCats);
     }
 
     public async Task<Dictionary<Cat, int>> GetAllCatsScoreAsync()
@@ -33,16 +28,16 @@ public class CatMashService: ICatMashService
         await _repository.SaveCatScoresAsync(catScores);
     }
 
-    private IEnumerable<Cat> GetTwoDifferentRandomCats()
+    private IEnumerable<Cat> GetTwoDifferentRandomCats(List<Cat> allCats)
     {
         var random = new Random();
-        var firstRandomIndex = random.Next(_allCats.Count);
-        var secondRandomIndex = random.Next(_allCats.Count);
+        var firstRandomIndex = random.Next(allCats.Count);
+        var secondRandomIndex = random.Next(allCats.Count);
         while (secondRandomIndex == firstRandomIndex)
         {
-            secondRandomIndex = random.Next(_allCats.Count);
+            secondRandomIndex = random.Next(allCats.Count);
         }
 
-        return new Cat[] { _allCats[firstRandomIndex], _allCats[secondRandomIndex] };
+        return new Cat[] { allCats[firstRandomIndex], allCats[secondRandomIndex] };
     }
 }

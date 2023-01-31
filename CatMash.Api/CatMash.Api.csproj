@@ -16,4 +16,8 @@
       <ProjectReference Include="..\CatMash.Persistence\CatMash.Persistence.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="Data\SampleData.json" />
+    </ItemGroup>
+
 </Project>

@@ -2,17 +2,11 @@
 
 public class Cat
 {
-    private Cat(string id, string url)
-    {
-        Id = id;
-        Url = url;
-    }
-    
-    public string Id { get; }
-    public string Url { get; }
+    public string Id { get; init; }
+    public string Url { get; init; }
 
     public static Cat Create(string id, string url)
     {
-        return new Cat(id, url);
+        return new Cat {Id = id, Url = url};
     }
 }

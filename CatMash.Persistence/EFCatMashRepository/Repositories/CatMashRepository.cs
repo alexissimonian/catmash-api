@@ -1,7 +1,9 @@
-﻿using CatMash.Domain.Interfaces;
+﻿using System.Reflection;
+using CatMash.Domain.Interfaces;
 using CatMash.Domain.Models;
 using CatMash.Persistence.EFCatMashRepository.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace CatMash.Persistence.EFCatMashRepository.Repositories;
 
@@ -12,7 +14,18 @@ public class CatMashRepository: ICatMashRepository
     public CatMashRepository(CatContext context)
     {
         _context = context;
-        
+    }
+    
+    public async Task InitDataContext()
+    {
+        List<CatScore> catScore = new();
+        using (StreamReader r = new StreamReader(@"Data\SampleData.Json"))
+        {
+            string json = await r.ReadToEndAsync();
+            catScore = JsonConvert.DeserializeObject<List<CatScore>>(json);
+        }
+
+        await _context.AddRangeAsync(catScore);
     }
     
     public async Task<List<Cat>> GetAllCatsAsync()

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using CatMash.Domain.Interfaces;
 using CatMash.Domain.Services;
 using CatMash.Persistence.EFCatMashRepository.Models;
@@ -21,10 +22,16 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddDbContext<CatContext>(opt =>
     opt.UseInMemoryDatabase("CatScoreList"));
-builder.Services.AddSingleton<ICatMashService, CatMashService>();
-builder.Services.AddSingleton<ICatMashRepository, CatMashRepository>();
-
+builder.Services.AddScoped<ICatMashService, CatMashService>();
+builder.Services.AddScoped<ICatMashRepository, CatMashRepository>();
 var app = builder.Build();
+
+// Init data
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var repository = scope.ServiceProvider.GetRequiredService<ICatMashRepository>();
+    await repository.InitDataContext();
+}
 
 app.UseHttpsRedirection();
 app.UseCors(myAllowSpecificOrigins);
@@ -32,3 +39,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

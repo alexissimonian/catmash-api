@@ -60,10 +60,10 @@ public class CatMashControllerShould : IClassFixture<WebApplicationFactory<Progr
         };
         var expectedCatScoreApiList = new List<CatScoreApi>()
         {
-            {new(new CatApi("1", "test/test1"), 2)},
-            {new(new CatApi("2", "test/test2"), 6)},
-            {new(new CatApi("3", "test/test3"), 9)},
-            {new(new CatApi("4", "test/test4"), 0)}
+            new("1", "test/test1", 2),
+            new("2", "test/test2", 6),
+            new("3", "test/test3", 9),
+            new("4", "test/test4", 0)
         };
         _service.Setup(s => s.GetAllCatsScoreAsync()).ReturnsAsync(expectedRandomCats);
         
@@ -82,15 +82,16 @@ public class CatMashControllerShould : IClassFixture<WebApplicationFactory<Progr
     public async Task SaveCatScoresAsync()
     {
         // Arrange
-        var request = new Dictionary<string, int> { { "1", 2 }, {"2", 1} };
-        _service.Setup(s => s.SaveCatScoresAsync(request));
+        var request = new[]{new CatScoreRequest("1", 2)};
+        var convertedRequest = new Dictionary<string, int>(){{"1", 2}};
+        _service.Setup(s => s.SaveCatScoresAsync(convertedRequest));
         
         // Act
         var response = await _client.PutAsJsonAsync("api/catmash",
-            new CatScoreRequest(request));
+            request);
 
         // Assert
         response.EnsureSuccessStatusCode();
-        _service.Verify(s => s.SaveCatScoresAsync(request), Times.Exactly(1));
+        _service.Verify(s => s.SaveCatScoresAsync(convertedRequest), Times.Exactly(1));
     }
 }

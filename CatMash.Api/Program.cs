@@ -14,8 +14,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
         policy  =>
         {
-            policy.WithOrigins("https://localhost:7161",
-                "http://localhost:4200");
+            policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
         });
 });
 
@@ -26,11 +25,15 @@ builder.Services.AddScoped<ICatMashService, CatMashService>();
 builder.Services.AddScoped<ICatMashRepository, CatMashRepository>();
 var app = builder.Build();
 
-// Init data
-await using (var scope = app.Services.CreateAsyncScope())
+bool isUnderTest = AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName.ToLower().StartsWith("xunit"));
+if (!isUnderTest)
 {
-    var repository = scope.ServiceProvider.GetRequiredService<ICatMashRepository>();
-    await repository.InitDataContext();
+    // Init data
+    await using (var scope = app.Services.CreateAsyncScope())
+    {
+        var repository = scope.ServiceProvider.GetRequiredService<ICatMashRepository>();
+        await repository.InitDataContext();
+    }
 }
 
 app.UseExceptionHandler("/error");

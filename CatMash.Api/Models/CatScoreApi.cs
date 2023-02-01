@@ -1,3 +1,3 @@
 ﻿namespace CatMash.Api.Models;
 
-public record CatScoreApi(CatApi cat, int score);
+public record CatScoreApi(string id, string url, int score);

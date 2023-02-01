@@ -1,3 +1,3 @@
 ﻿namespace CatMash.Api.Models;
 
-public record CatScoreRequest(Dictionary<string, int> Scores);
+public record CatScoreRequest(string Id, int Score);

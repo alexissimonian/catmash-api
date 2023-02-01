@@ -30,15 +30,17 @@ public class CatMashController : ControllerBase
     public async Task<ActionResult<IEnumerable<CatScoreApi>>> GetAllCatsScoreAsync()
     {
         var catScores = await _service.GetAllCatsScoreAsync();
-        var response = catScores.Select(c => new CatScoreApi(GetCatApiFromCat(c.Key), c.Value));
+        var response = catScores.Select(c => new CatScoreApi(c.Key.Id, c.Key.Url, c.Value));
         return Ok(response);
     }
     
-    [HttpPut]
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IEnumerable<Cat>>> SaveCatScoresAsync(CatScoreRequest request)
+    public async Task<IActionResult> SaveCatScoresAsync(CatScoreRequest[] request)
     {
-        await _service.SaveCatScoresAsync(request.Scores);
+        var convertedRequest = request.ToDictionary(r => r.Id, r => r.Score);
+        await _service.SaveCatScoresAsync(convertedRequest);
         return NoContent();
     }
 

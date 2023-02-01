@@ -6,5 +6,5 @@ public interface ICatMashService
 {
     public Task<IEnumerable<Cat>> GetTwoRandomCatsAsync();
     public Task<Dictionary<Cat, int>> GetAllCatsScoreAsync();
-    public Task SaveCatScoresAsync(Dictionary<Cat, int> catScores);
+    public Task SaveCatScoresAsync(Dictionary<string, int> catScores);
 }

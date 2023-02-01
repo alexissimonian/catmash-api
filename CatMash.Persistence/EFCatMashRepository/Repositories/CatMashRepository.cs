@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+﻿using CatMash.Domain.Exceptions;
 using CatMash.Domain.Interfaces;
 using CatMash.Domain.Models;
 using CatMash.Persistence.EFCatMashRepository.Models;
@@ -19,13 +19,14 @@ public class CatMashRepository: ICatMashRepository
     public async Task InitDataContext()
     {
         List<CatScore> catScore = new();
-        using (StreamReader r = new StreamReader(@"Data\SampleData.Json"))
+        using (StreamReader r = new StreamReader(@"InitSample\SampleData.Json"))
         {
             string json = await r.ReadToEndAsync();
             catScore = JsonConvert.DeserializeObject<List<CatScore>>(json);
         }
 
         await _context.AddRangeAsync(catScore);
+        await _context.SaveChangesAsync();
     }
     
     public async Task<List<Cat>> GetAllCatsAsync()
@@ -40,10 +41,20 @@ public class CatMashRepository: ICatMashRepository
         return ConvertCatScoreToDictionary(cats);
     }
 
-    public async Task SaveCatScoresAsync(Dictionary<Cat, int> dictionaryCatScore)
+    public async Task<ErrorResponseType> SaveCatScoresAsync(Dictionary<string, int> dictionaryCatScore)
     {
-        IEnumerable<CatScore> catScores = ConvertDictionaryToCatScore(dictionaryCatScore);
-        await _context.CatScores.AddRangeAsync(catScores);
+        foreach (var kvp in dictionaryCatScore)
+        {
+            var scoreToEdit = await _context.CatScores.FindAsync(kvp.Key);
+            if (scoreToEdit is null)
+            {
+                return ErrorResponseType.NotFound;
+            }
+            
+            scoreToEdit.Score += kvp.Value;
+        }
+        await _context.SaveChangesAsync();
+        return ErrorResponseType.Ok;
     }
 
     private Cat ConvertCatScoreToCat(CatScore catScore)
@@ -54,10 +65,5 @@ public class CatMashRepository: ICatMashRepository
     private Dictionary<Cat, int> ConvertCatScoreToDictionary(IEnumerable<CatScore> catScores)
     {
         return catScores.ToDictionary(ConvertCatScoreToCat, catScore => catScore.Score);
-    }
-
-    private IEnumerable<CatScore> ConvertDictionaryToCatScore(Dictionary<Cat, int> dictionaryCatScore)
-    {
-        return dictionaryCatScore.Select(d => new CatScore() { Id = d.Key.Id, Url = d.Key.Url, Score = d.Value });
     }
 }

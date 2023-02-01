@@ -1,4 +1,5 @@
-﻿using CatMash.Domain.Interfaces;
+﻿using CatMash.Domain.Exceptions;
+using CatMash.Domain.Interfaces;
 using CatMash.Domain.Models;
 
 namespace CatMash.Domain.Services;
@@ -23,9 +24,13 @@ public class CatMashService: ICatMashService
         return await _repository.GetAllCatsScoreAsync();
     }
 
-    public async Task SaveCatScoresAsync(Dictionary<Cat, int> catScores)
+    public async Task SaveCatScoresAsync(Dictionary<string, int> catScores)
     {
-        await _repository.SaveCatScoresAsync(catScores);
+        var response = await _repository.SaveCatScoresAsync(catScores);
+        if (response == ErrorResponseType.NotFound)
+        {
+            throw new CatScoreNotFoundException("One of the cat you submitted cannot be found");
+        }
     }
 
     private IEnumerable<Cat> GetTwoDifferentRandomCats(List<Cat> allCats)

@@ -67,20 +67,20 @@ public class CatMashServiceShould
     public async Task CallSaveCatScores()
     {
         // Arrange
-        Dictionary<Cat, int> dictionaryCatScore = new()
+        Dictionary<string, int> dictionaryIdScore = new()
         {
-            { Cat.Create("1", "test/test1"), 2 },
-            { Cat.Create("2", "test/test2"), 8 },
-            { Cat.Create("3", "test/test3"), 61 },
-            { Cat.Create("4", "test/test4"), 124 }
+            { "1", 2 },
+            { "2", 8 },
+            { "3", 61 },
+            { "4", 124 }
         };
-        _repository.Setup(r => r.SaveCatScoresAsync(dictionaryCatScore));
+        _repository.Setup(r => r.SaveCatScoresAsync(dictionaryIdScore));
 
         // Act
-        await _sut.SaveCatScoresAsync(dictionaryCatScore);
+        await _sut.SaveCatScoresAsync(dictionaryIdScore);
 
         // Assert
-        _repository.Verify(r => r.SaveCatScoresAsync(dictionaryCatScore), Times.Exactly(1));
+        _repository.Verify(r => r.SaveCatScoresAsync(dictionaryIdScore), Times.Exactly(1));
         _repository.VerifyNoOtherCalls();
     }
 }

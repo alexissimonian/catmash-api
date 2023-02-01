@@ -33,6 +33,7 @@ await using (var scope = app.Services.CreateAsyncScope())
     await repository.InitDataContext();
 }
 
+app.UseExceptionHandler("/error");
 app.UseHttpsRedirection();
 app.UseCors(myAllowSpecificOrigins);
 app.UseAuthorization();
